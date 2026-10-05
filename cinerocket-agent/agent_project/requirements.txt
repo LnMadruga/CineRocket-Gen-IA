@@ -1,0 +1,17 @@
+# Cliente HTTP compatível com OpenAI, usado para falar com o OpenRouter
+# (mesma API, só troca a base_url e o nome do modelo).
+openai>=1.50,<2.0
+
+# Variáveis de ambiente (.env)
+python-dotenv>=1.0,<2.0
+
+# Backend FastAPI (um dos formatos de entregável aceitos pelo enunciado)
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+
+# Busca por similaridade de texto sobre as sinopses (bônus: agente híbrido)
+scikit-learn>=1.4,<2.0
+
+# Testes
+pytest>=8.0,<9.0
+httpx>=0.27,<1.0

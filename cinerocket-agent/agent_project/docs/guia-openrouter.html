@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rocket LAB — Guia OpenRouter</title>
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --navy-light: #1b2d45;
+    --gold: #c9a84c;
+    --gold-light: #e0c572;
+    --teal: #1a6b52;
+    --teal-dark: #0f4a38;
+    --white: #ffffff;
+    --gray-bg: #f6f7f9;
+    --gray-border: #e2e4e8;
+    --text: #1e1e1e;
+    --text-muted: #555;
+    --code-bg: #0e1a2b;
+    --radius: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--white);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ── Banner ── */
+  .banner {
+    width: 100%;
+    position: relative;
+    background: var(--navy);
+  }
+  .banner img {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+  }
+  .banner-overlay {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(transparent, rgba(13,27,42,.85));
+    padding: 32px 24px 20px;
+    text-align: center;
+  }
+  .banner-overlay p {
+    color: rgba(255,255,255,.85);
+    font-size: 1.1rem;
+  }
+
+  /* ── Layout ── */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── Nav / TOC ── */
+  .toc {
+    background: var(--gray-bg);
+    border: 1px solid var(--gray-border);
+    border-radius: var(--radius);
+    margin: 32px auto;
+    padding: 20px 28px;
+    max-width: 860px;
+  }
+  .toc h2 {
+    font-size: .85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; }
+  .toc a {
+    color: var(--teal);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .toc a:hover { text-decoration: underline; }
+
+  /* ── Sections ── */
+  section {
+    margin: 40px auto;
+    max-width: 860px;
+  }
+  section h2 {
+    font-size: 1.45rem;
+    color: var(--navy);
+    border-bottom: 3px solid var(--gold);
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+  }
+  section h3 {
+    font-size: 1.1rem;
+    color: var(--teal);
+    margin: 20px 0 8px;
+  }
+  p, li { margin-bottom: 8px; }
+  ul, ol { padding-left: 22px; }
+  a { color: var(--teal); }
+
+  /* ── Alert boxes ── */
+  .alert {
+    border-left: 4px solid;
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: .95rem;
+  }
+  .alert-warn {
+    background: #fff8e6;
+    border-color: var(--gold);
+    color: #6b5518;
+  }
+  .alert-warn strong { color: #8a6d1b; }
+  .alert-info {
+    background: #e9f7f2;
+    border-color: var(--teal);
+    color: #145a40;
+  }
+  .alert-danger {
+    background: #fce8e8;
+    border-color: #c0392b;
+    color: #7a1a1a;
+  }
+
+  /* ── Code ── */
+  pre {
+    background: var(--code-bg);
+    color: #e0e6ed;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    font-size: .88rem;
+    line-height: 1.55;
+    margin: 12px 0;
+  }
+  code {
+    font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+  }
+  p code, li code, td code {
+    background: var(--gray-bg);
+    border: 1px solid var(--gray-border);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: .88em;
+    color: var(--navy);
+  }
+
+  /* ── Tables ── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: .92rem;
+  }
+  th {
+    background: var(--navy);
+    color: var(--white);
+    text-align: left;
+    padding: 10px 14px;
+  }
+  th:first-child { border-radius: var(--radius) 0 0 0; }
+  th:last-child  { border-radius: 0 var(--radius) 0 0; }
+  td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--gray-border);
+  }
+  tr:nth-child(even) td { background: var(--gray-bg); }
+
+  /* ── Steps ── */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding-left: 0;
+  }
+  .steps li {
+    counter-increment: step;
+    padding-left: 44px;
+    position: relative;
+    margin-bottom: 18px;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 0;
+    width: 30px; height: 30px;
+    background: var(--teal);
+    color: var(--white);
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    font-weight: 700;
+    font-size: .85rem;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+  }
+  .badge-free { background: #d5f5e3; color: #145a40; }
+  .badge-limit { background: #fdebd0; color: #7e5109; }
+
+  /* ── Footer ── */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,.5);
+    text-align: center;
+    padding: 20px;
+    font-size: .82rem;
+    margin-top: 48px;
+  }
+  footer a { color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<!-- ════ BANNER ════ -->
+<header class="banner">
+  <img src="banner.jpg" alt="Rocket LAB">
+  <div class="banner-overlay">
+    <p>Guia prático — OpenRouter para atividades de GenAI</p>
+  </div>
+</header>
+
+<!-- ════ TOC ════ -->
+<nav class="toc container">
+  <h2>Sumário</h2>
+  <ol>
+    <li><a href="#oque">O que é o OpenRouter</a></li>
+    <li><a href="#criar-conta">Criando conta e chave de API</a></li>
+    <li><a href="#modelos-free">Modelos gratuitos</a></li>
+    <li><a href="#modelo-nao-responde">Erro 429 — o modelo não respondeu?</a></li>
+    <li><a href="#rastreio">Rastreio de uso e limites</a></li>
+    <li><a href="#erros">Erros comuns</a></li>
+  </ol>
+</nav>
+
+<main class="container">
+
+<!-- ════ 1. O QUE É ════ -->
+<section id="oque">
+  <h2>1. O que é o OpenRouter</h2>
+  <p>
+    O <a href="https://openrouter.ai" target="_blank">OpenRouter</a> é um <strong>roteador de LLMs</strong>.
+    Ele não treina modelos — agrega dezenas deles (Google, Meta, NVIDIA, etc.) atrás de
+    <strong>uma única API compatível com a da OpenAI</strong>.
+  </p>
+  <p>
+    Você cria uma conta, gera uma chave, e chama qualquer modelo trocando apenas o campo <code>model</code>.
+    Para este treinamento usaremos <strong>modelos gratuitos</strong>, sem necessidade de cartão de crédito.
+  </p>
+</section>
+
+<!-- ════ 2. CRIANDO CONTA ════ -->
+<section id="criar-conta">
+  <h2>2. Criando conta e chave de API</h2>
+  <ol class="steps">
+    <li>Acesse <a href="https://openrouter.ai" target="_blank">openrouter.ai</a> e crie uma conta (Google, GitHub ou e-mail).</li>
+    <li>Vá em <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a> e clique em <strong>Create Key</strong>.</li>
+    <li>Copie a chave gerada (começa com <code>sk-or-v1-...</code>). Ela só aparece uma vez.</li>
+    <li>Guarde essa chave. Você usará ela para autenticar suas chamadas à API.</li>
+  </ol>
+</section>
+
+<!-- ════ 3. MODELOS FREE ════ -->
+<section id="modelos-free">
+  <h2>3. Modelos gratuitos <span class="badge badge-free">FREE</span></h2>
+  <p>
+    O modelo padrão recomendado é o <code>openrouter/free</code> — um router que seleciona automaticamente
+    um modelo gratuito disponível no momento. É a forma mais simples de começar.
+  </p>
+
+  <h3>Endpoint e configuração</h3>
+  <table>
+    <thead>
+      <tr><th>Parâmetro</th><th>Valor</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Base URL</td><td><code>https://openrouter.ai/api/v1</code></td></tr>
+      <tr><td>Model</td><td><code>openrouter/free</code></td></tr>
+      <tr><td>Auth header</td><td><code>Authorization: Bearer sk-or-v1-SUA_CHAVE</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Se quiser escolher um modelo específico, alguns modelos gratuitos de <strong>chat</strong> disponíveis:</p>
+
+  <table>
+    <thead>
+      <tr><th>Modelo</th><th>Contexto</th><th>Observação</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>nvidia/nemotron-3.5-lightning:free</code></td>
+        <td>128K</td>
+        <td>Rápido, bom para chat e geração de SQL</td>
+      </tr>
+      <tr>
+        <td><code>google/gemma-4-26b-a4b-it:free</code></td>
+        <td>96K</td>
+        <td>Boa qualidade; pode ficar lotado nos horários de pico</td>
+      </tr>
+      <tr>
+        <td><code>z-ai/glm-5.2:free</code></td>
+        <td>128K</td>
+        <td>Estável, boa alternativa</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    A lista completa está em
+    <a href="https://openrouter.ai/models?q=:free" target="_blank">openrouter.ai/models?q=:free</a>.
+  </p>
+
+</section>
+
+<!-- ════ 4. NÃO RESPONDEU? ════ -->
+<section id="modelo-nao-responde">
+  <h2>4. O modelo não respondeu?</h2>
+  <p>
+    Se você recebeu um erro <code>429</code>, não se preocupe — provavelmente não é um problema com a sua chave.
+  </p>
+  <p>
+    Modelos <code>:free</code> compartilham um pool de capacidade. Se muitas pessoas usam ao mesmo tempo,
+    o provider fica temporariamente lotado. Isso é diferente de ter esgotado sua cota diária.
+  </p>
+  <p><strong>O que fazer:</strong> teste outro modelo gratuito. Troque o campo <code>model</code> na sua chamada.</p>
+</section>
+
+<!-- ════ 5. RASTREIO ════ -->
+<section id="rastreio">
+  <h2>5. Rastreio de uso e limites <span class="badge badge-limit">IMPORTANTE</span></h2>
+
+  <h3>Limites do free tier</h3>
+  <table>
+    <thead>
+      <tr><th>Situação</th><th>Requests/minuto</th><th>Requests/dia</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Sem créditos comprados</td><td>20</td><td><strong>50</strong></td></tr>
+      <tr><td>Comprou ≥ US$10 alguma vez</td><td>20</td><td>1.000</td></tr>
+    </tbody>
+  </table>
+
+  <div class="alert alert-danger">
+    <strong>Requests que falham também contam</strong> no limite do dia. Se você receber um 429 e ficar
+    re-tentando imediatamente, vai queimar sua cota sem obter resposta.
+  </div>
+
+  <h3>Como verificar sua cota</h3>
+  <p><strong>Painel web:</strong> acesse <a href="https://openrouter.ai/activity" target="_blank">openrouter.ai/activity</a> para ver quantas requests fez no dia.</p>
+  <p><strong>Via API:</strong> faça um <code>GET</code> em <code>https://openrouter.ai/api/v1/key</code> com sua chave no header.
+     O campo <code>free_model_daily_requests</code> retorna:</p>
+  <pre><code>{
+  "used": 12,
+  "limit": 50,
+  "remaining": 38
+}</code></pre>
+
+  <h3>Quando reseta?</h3>
+  <p>
+    O contador zera à <strong>meia-noite UTC</strong> — ou seja, <strong>21h no horário de Brasília</strong>.
+  </p>
+
+  <div class="alert alert-info">
+    <strong>Dica:</strong> antes de iterar sobre várias versões do prompt, verifique quantas requests restam.
+    Planeje e estruture o prompt antes de disparar chamadas.
+  </div>
+</section>
+
+<!-- ════ 6. ERROS ════ -->
+<section id="erros">
+  <h2>6. Erros comuns</h2>
+  <table>
+    <thead>
+      <tr><th>Código</th><th>Causa</th><th>O que fazer</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>401</code></td>
+        <td>Chave inválida ou ausente</td>
+        <td>Confirme que a chave começa com <code>sk-or-v1-</code> e está sendo enviada corretamente</td>
+      </tr>
+      <tr>
+        <td><code>429</code> + <code>upstream_provider</code></td>
+        <td>Pool do provider lotado</td>
+        <td>Não é sua cota. Teste outro modelo gratuito</td>
+      </tr>
+      <tr>
+        <td><code>429</code> (sem provider)</td>
+        <td>Cota do dia atingida (50 req)</td>
+        <td>Verifique em <a href="https://openrouter.ai/activity" target="_blank">activity</a>. Aguarde o reset às 21h (BRT)</td>
+      </tr>
+      <tr>
+        <td><code>402</code></td>
+        <td>Saldo negativo na conta</td>
+        <td>Modelos :free não cobram. Se apareceu, verifique se o saldo da conta não está negativo</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+</main>
+
+<footer>
+  <p>rocket LAB — Guia OpenRouter &nbsp;·&nbsp;
+    <a href="https://openrouter.ai/docs" target="_blank">Documentação oficial</a> &nbsp;·&nbsp;
+    <a href="https://openrouter.ai/activity" target="_blank">Painel de uso</a>
+  </p>
+</footer>
+
+</body>
+</html>

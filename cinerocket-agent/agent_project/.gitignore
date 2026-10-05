@@ -1,0 +1,22 @@
+# Ambiente Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Ambiente e segredos
+.env
+
+# Banco de dados e cache (não versionar: cinerocket.db tem ~554MB,
+# acima do limite de 100MB do GitHub; cache.sqlite é gerado localmente)
+data/*.db
+data/cache.sqlite
+!data/.gitkeep
+
+# Notebook: saídas de execução (contêm perguntas/respostas de teste, não precisam ser versionadas)
+.ipynb_checkpoints/
+
+# SO / IDE
+.DS_Store
+.vscode/

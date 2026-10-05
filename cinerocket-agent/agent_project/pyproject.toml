@@ -1,0 +1,10 @@
+[tool.ruff]
+line-length = 115
+target-version = "py311"
+
+[tool.ruff.lint]
+# BLE001 (captura de Exception genérica) é desligada de propósito: o agente precisa capturar
+# QUALQUER falha de rede/modelo (para tentar o próximo da lista de fallback) e qualquer falha
+# da busca por sinopse (para nunca derrubar o loop principal por causa de uma ferramenta
+# auxiliar) — são capturas amplas deliberadas, não acidentais.
+ignore = ["BLE001"]
